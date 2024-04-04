@@ -1,8 +1,6 @@
 package com.example.spotifysearch.ui
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +11,7 @@ import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +24,6 @@ internal class SearchViewModel @Inject constructor(
     val tokenResponse: LiveData<TokenResponse>
         get() = _tokenResponse
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getAccessToken() {
         viewModelScope.launch {
             try {
@@ -38,9 +35,8 @@ internal class SearchViewModel @Inject constructor(
 
                 sharedPreference.accessToken = _tokenResponse.value?.accessToken
                 sharedPreference.tokenType = _tokenResponse.value?.tokenType
-                sharedPreference.expiresIn = Instant.now()
-                    .plusSeconds(_tokenResponse.value?.expiresIn?.toLong() ?: 0)
-                    .epochSecond
+                sharedPreference.expiresIn =
+                    (Date().time / 1000) + (_tokenResponse.value?.expiresIn?.toLong() ?: 3600L)
             } catch (e: Exception) {
                 Log.d(Constants.OAUTH_TAG, "getAccessToken: error $e")
             }

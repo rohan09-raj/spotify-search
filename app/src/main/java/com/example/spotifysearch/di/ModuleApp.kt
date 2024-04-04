@@ -1,12 +1,15 @@
 package com.example.spotifysearch.di
 
+import android.content.Context
 import com.example.spotifysearch.data.SearchDataSource
 import com.example.spotifysearch.data.SearchRepository
 import com.example.spotifysearch.network.SpotifyAPI
 import com.example.spotifysearch.network.SpotifyAPI.Companion.BASE_URL
+import com.example.spotifysearch.preferences.SharedPreference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,4 +33,9 @@ object AppModule {
     @Singleton
     fun provideSearchRepository(spotifyAPI: SpotifyAPI): SearchRepository =
         SearchDataSource(spotifyAPI)
+
+    @Provides
+    @Singleton
+    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreference =
+        SharedPreference(context)
 }
