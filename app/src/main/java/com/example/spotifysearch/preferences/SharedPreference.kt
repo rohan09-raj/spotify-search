@@ -12,7 +12,7 @@ class SharedPreference(context: Context) {
         private const val PREF_MODE = Context.MODE_PRIVATE
         private val PREF_ACCESS_TOKEN = Pair("ACCESS_TOKEN", "")
         private val PREF_TOKEN_TYPE = Pair("TOKEN_TYPE", "")
-        private val PREF_EXPIRES_IN = Pair("EXPIRES_IN", 0)
+        private val PREF_EXPIRES_IN = Pair("EXPIRES_IN", 0L)
     }
 
     var accessToken: String?
@@ -27,10 +27,10 @@ class SharedPreference(context: Context) {
             it.putString(PREF_TOKEN_TYPE.first, value)
         }
 
-    var expiresIn: Int
-        get() = preference.getInt(PREF_EXPIRES_IN.first, PREF_EXPIRES_IN.second)
+    var expiresIn: Long
+        get() = preference.getLong(PREF_EXPIRES_IN.first, PREF_EXPIRES_IN.second)
         set(value) = preference.edit {
-            it.putInt(PREF_EXPIRES_IN.first, value)
+            it.putLong(PREF_EXPIRES_IN.first, value)
         }
 }
 
