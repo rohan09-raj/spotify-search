@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.SpotifySearch" parent="Base.Theme.SpotifySearch" />
+
+    <style name="Theme.App.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_animated_spotify_splash</item>
+        <item name="windowSplashScreenAnimationDuration">3000</item>
+        <item name="postSplashScreenTheme">@style/Theme.SpotifySearch</item>
+    </style>
 </resources>
