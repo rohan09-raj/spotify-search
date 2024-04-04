@@ -1,8 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.SpotifySearch" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.SpotifySearch" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
     <style name="Theme.SpotifySearch" parent="Base.Theme.SpotifySearch" />
