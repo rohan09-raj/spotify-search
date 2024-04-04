@@ -5,17 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.spotifysearch.R
+import com.example.spotifysearch.databinding.FragmentSearchDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchDetailFragment : Fragment() {
 
+    private lateinit var binding: FragmentSearchDetailBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_detail, container, false)
+    ): View {
+        binding = FragmentSearchDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 }
