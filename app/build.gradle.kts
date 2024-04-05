@@ -75,6 +75,10 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
+
+    // Groupie
+    implementation(libs.groupie)
+    implementation(libs.groupie.viewbinding)
 }
 
 kapt {
