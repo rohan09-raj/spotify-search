@@ -2,8 +2,8 @@ package com.example.spotifysearch.network
 
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
-import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.utils.Constants
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -25,7 +25,7 @@ interface SpotifyAPI {
         @Field("grant_type") grantType: String,
         @Field("client_id") clientId: String,
         @Field("client_secret") clientSecret: String
-    ): Resource<TokenResponse>
+    ): Response<TokenResponse>
 
     @Headers("Accept: application/json")
     @GET("/search")
@@ -34,5 +34,5 @@ interface SpotifyAPI {
         @Query("q") query: String,
         @Query("type") type: String,
         @Query("limit") limit: Int?
-    ): Resource<SearchResponse>
+    ): Response<SearchResponse>
 }

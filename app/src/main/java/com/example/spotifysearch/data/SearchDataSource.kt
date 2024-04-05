@@ -3,6 +3,7 @@ package com.example.spotifysearch.data
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.network.SpotifyAPI
+import com.example.spotifysearch.network.executeRetrofitApi
 import com.example.spotifysearch.network.models.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,11 +20,13 @@ class SearchDataSource @Inject constructor(
     ): Flow<Resource<TokenResponse>> {
         return flow {
             emit(Resource.Loading())
-            val response = spotifyAPI.getAccessToken(
-                clientId = clientId,
-                clientSecret = clientSecret,
-                grantType = grantType
-            )
+            val response = executeRetrofitApi {
+                spotifyAPI.getAccessToken(
+                    clientId = clientId,
+                    clientSecret = clientSecret,
+                    grantType = grantType
+                )
+            }
 
             when (response) {
                 is Resource.Success -> {
@@ -47,12 +50,14 @@ class SearchDataSource @Inject constructor(
     ): Flow<Resource<SearchResponse>> {
         return flow {
             emit(Resource.Loading())
-            val response = spotifyAPI.getSearchResults(
-                token = token,
-                query = query,
-                type = type,
-                limit = limit
-            )
+            val response = executeRetrofitApi {
+                spotifyAPI.getSearchResults(
+                    token = token,
+                    query = query,
+                    type = type,
+                    limit = limit
+                )
+            }
 
             when (response) {
                 is Resource.Success -> {
