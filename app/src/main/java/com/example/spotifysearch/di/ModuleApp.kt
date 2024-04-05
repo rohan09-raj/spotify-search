@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.spotifysearch.data.SearchDataSource
 import com.example.spotifysearch.data.SearchRepository
 import com.example.spotifysearch.network.SpotifyAPI
-import com.example.spotifysearch.network.SpotifyAPI.Companion.BASE_URL
 import com.example.spotifysearch.preferences.SharedPreference
 import dagger.Module
 import dagger.Provides
@@ -21,7 +20,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(SpotifyAPI.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

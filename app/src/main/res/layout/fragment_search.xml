@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="12dp"
+        android:padding="16dp"
         android:background="@color/black">
 
         <ImageView
@@ -41,11 +41,12 @@
             android:background="@drawable/bg_white_rounded_8"
             android:theme="@style/SearchViewStyle"
             app:iconifiedByDefault="false"
-            app:layout_constraintTop_toBottomOf="@id/iv_spotify"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_spotify"
             app:queryHint="What do you want to search for?"
-            app:searchIcon="@drawable/ic_search_24" />
+            app:searchHintIcon="@drawable/ic_search_light_24"
+            app:searchIcon="@drawable/ic_search_dark_24" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search"

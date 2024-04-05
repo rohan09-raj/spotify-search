@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spotifysearch.data.SearchRepository
+import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
@@ -28,6 +29,14 @@ internal class SearchViewModel @Inject constructor(
     private val _tokenResponse = MutableLiveData<TokenResponse>()
     val tokenResponse: LiveData<TokenResponse>
         get() = _tokenResponse
+
+    private val _searchResultsResource = MutableLiveData<Resource<SearchResponse>>()
+    val searchResultsResource: LiveData<Resource<SearchResponse>>
+        get() = _searchResultsResource
+
+    private val _searchResults = MutableLiveData<SearchResponse>()
+    val searchResults: LiveData<SearchResponse>
+        get() = _searchResults
 
     fun getAccessToken() {
         viewModelScope.launch {
@@ -70,28 +79,29 @@ internal class SearchViewModel @Inject constructor(
     fun getSearchResults(query: String, type: List<String>) {
         viewModelScope.launch {
             try {
-                val token = sharedPreference.accessToken
-                if (token != null) {
-                    searchRepository.search(
-                        token = token,
-                        query = query,
-                        type = type.joinToString(separator = "%2C"),
-                        limit = 10
-                    ).collect { resource ->
-                        when (resource) {
-                            is Resource.Success -> {
-                                Log.d(Constants.OAUTH_TAG, "getSearchResults: ${resource.data}")
-                            }
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                val types = type.joinToString(separator = ",")
 
-                            is Resource.Error -> {
-                                Log.d(
-                                    Constants.OAUTH_TAG,
-                                    "getSearchResults: error ${resource.errorResponse}"
-                                )
-                            }
+                searchRepository.search(
+                    token = token,
+                    query = query,
+                    type = types,
+                    limit = 20
+                ).collect { resource ->
+                    _searchResultsResource.value = resource
+                    when (resource) {
+                        is Resource.Success -> {
+                            _searchResults.value = resource.data
+                        }
 
-                            else -> {
-                            }
+                        is Resource.Error -> {
+                            Log.d(
+                                Constants.OAUTH_TAG,
+                                "getSearchResults: error ${resource.errorResponse}"
+                            )
+                        }
+
+                        else -> {
                         }
                     }
                 }

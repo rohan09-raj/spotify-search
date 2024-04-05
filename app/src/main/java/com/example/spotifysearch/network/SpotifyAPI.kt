@@ -28,7 +28,7 @@ interface SpotifyAPI {
     ): Response<TokenResponse>
 
     @Headers("Accept: application/json")
-    @GET("/search")
+    @GET("search")
     suspend fun getSearchResults(
         @Header("authorization") token: String,
         @Query("q") query: String,
