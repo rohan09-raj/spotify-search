@@ -3,6 +3,9 @@ package com.example.spotifysearch.data
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.network.SpotifyAPI
+import com.example.spotifysearch.network.models.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SearchDataSource @Inject constructor(
@@ -13,25 +16,55 @@ class SearchDataSource @Inject constructor(
         clientId: String,
         clientSecret: String,
         grantType: String
-    ): TokenResponse {
-        return spotifyAPI.getAccessToken(
-            clientId = clientId,
-            clientSecret = clientSecret,
-            grantType = grantType
-        )
+    ): Flow<Resource<TokenResponse>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = spotifyAPI.getAccessToken(
+                clientId = clientId,
+                clientSecret = clientSecret,
+                grantType = grantType
+            )
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
     }
 
     override suspend fun search(
         token: String,
         query: String,
         type: String,
-        limit: Int
-    ): SearchResponse {
-        return spotifyAPI.getSearchResults(
-            token = token,
-            query = query,
-            type = type,
-            limit = limit
-        )
+        limit: Int?
+    ): Flow<Resource<SearchResponse>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = spotifyAPI.getSearchResults(
+                token = token,
+                query = query,
+                type = type,
+                limit = limit
+            )
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
     }
 }
