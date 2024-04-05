@@ -35,6 +35,8 @@ data class Album(
     val name: String,
     @SerializedName("type")
     val type: String,
+    @SerializedName("release_date")
+    val releaseDate: String,
     @SerializedName("artists")
     val artists: List<Artist>
 )

@@ -9,7 +9,12 @@
         android:id="@+id/searchFragment"
         android:name="com.example.spotifysearch.ui.screens.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_search_to_detail"
+            app:destination="@id/searchDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/searchDetailFragment"
