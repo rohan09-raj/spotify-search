@@ -1,9 +1,16 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hilt)
 }
+
+val apikeyPropertiesFile = rootProject.file("apikey.properties")
+val apikeyProperties = Properties()
+apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.example.spotifysearch"
@@ -26,6 +33,21 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "SPOTIFY_CLIENT_ID",
+                apikeyProperties["SPOTIFY_CLIENT_ID"].toString()
+            )
+            buildConfigField("String", "SPOTIFY_CLIENT_SECRET",
+                apikeyProperties["SPOTIFY_CLIENT_SECRET"].toString()
+            )
+        }
+
+        debug {
+            buildConfigField("String", "SPOTIFY_CLIENT_ID",
+                apikeyProperties["SPOTIFY_CLIENT_ID"].toString()
+            )
+            buildConfigField("String", "SPOTIFY_CLIENT_SECRET",
+                apikeyProperties["SPOTIFY_CLIENT_SECRET"].toString()
+            )
         }
     }
     compileOptions {
@@ -36,6 +58,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
