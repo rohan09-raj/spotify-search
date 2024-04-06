@@ -6,6 +6,7 @@ Welcome to Spotify Search, your ultimate companion for exploring the vast world 
 ## Features
 - Explore Artists, Albums, Playlists and Tracks
 - Recent Search enhances the search experience by displaying the most recent detail page visits using RoomDB
+- Delete recent search
 
 ## Android APK
 [Groww Assignment APK](https://drive.google.com/drive/folders/1bo4L81OgNJbd-128RQRwBs3gsyx7WNi7?usp=drive_link)
@@ -17,7 +18,7 @@ Welcome to Spotify Search, your ultimate companion for exploring the vast world 
 
 
 ## Android App in Action
-https://github.com/rohan09-raj/spotify-search/assets/78433013/933e8c72-9ffa-4dbc-8251-5314bc0857e3
+https://github.com/rohan09-raj/spotify-search/assets/78433013/3fc58952-5896-4e4e-a643-37e2ea86bcc6
 
 ## Dependencies Used
 - Glide
