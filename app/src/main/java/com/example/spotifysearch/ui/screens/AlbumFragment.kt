@@ -27,9 +27,6 @@ class AlbumFragment : Fragment() {
     private val viewModel: SearchViewModel by activityViewModels()
     private var detailsAdapter = GroupAdapter<GroupieViewHolder>()
     private var detailsSection = Section()
-    private var albumsSection = Section()
-    private var topTracksSection = Section()
-    private var relatedArtistsSection = Section()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,12 +79,7 @@ class AlbumFragment : Fragment() {
     private fun setAlbumData(album: Album) {
         binding.rvAlbum.adapter = detailsAdapter
         detailsAdapter.replaceAll(
-            listOf(
-                detailsSection,
-                albumsSection,
-                topTracksSection,
-                relatedArtistsSection
-            )
+            listOf(detailsSection)
         )
         detailsSection.replaceAll(
             listOf(

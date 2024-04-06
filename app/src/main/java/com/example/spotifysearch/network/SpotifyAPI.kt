@@ -9,6 +9,7 @@ import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.model.Track
+import com.example.spotifysearch.model.Tracks
 import com.example.spotifysearch.utils.Constants
 import retrofit2.Response
 import retrofit2.http.Field
@@ -50,6 +51,13 @@ interface SpotifyAPI {
         @Header("authorization") token: String,
         @Path("id") id: String
     ): Response<Album>
+
+    @Headers("Accept: application/json")
+    @GET("albums/{id}/tracks")
+    suspend fun getAlbumTracks(
+        @Header("authorization") token: String,
+        @Path("id") id: String
+    ): Response<Tracks>
 
     @Headers("Accept: application/json")
     @GET("artists/{id}")

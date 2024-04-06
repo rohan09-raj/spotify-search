@@ -32,7 +32,12 @@
         android:id="@+id/albumFragment"
         android:name="com.example.spotifysearch.ui.screens.AlbumFragment"
         android:label="fragment_album"
-        tools:layout="@layout/fragment_album" />
+        tools:layout="@layout/fragment_album">
+
+        <action
+            android:id="@+id/action_album_to_track"
+            app:destination="@id/trackFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/artistFragment"

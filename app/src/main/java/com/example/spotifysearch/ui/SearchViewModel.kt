@@ -16,6 +16,7 @@ import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.Track
+import com.example.spotifysearch.model.Tracks
 import com.example.spotifysearch.model.database.LastSearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
@@ -68,6 +69,9 @@ internal class SearchViewModel @Inject constructor(
     private val _relatedArtistsResource = MutableLiveData<Resource<ArtistRelatedArtists>>()
     val relatedArtistsResource: LiveData<Resource<ArtistRelatedArtists>>
         get() = _relatedArtistsResource
+
+    private val _albumTracksResource = MutableStateFlow<Resource<Tracks>>(Resource.Loading())
+    val albumTracksResource = _albumTracksResource.asStateFlow()
 
     fun getAccessToken() {
         viewModelScope.launch {
@@ -188,6 +192,22 @@ internal class SearchViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.d(Constants.OAUTH_TAG, "getAlbum: error $e")
+            }
+        }
+    }
+
+    fun getAlbumTracks(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getAlbumTracks(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _albumTracksResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getAlbumTracks: error $e")
             }
         }
     }

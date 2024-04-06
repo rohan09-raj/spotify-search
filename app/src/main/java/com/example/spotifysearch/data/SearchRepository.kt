@@ -9,6 +9,7 @@ import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.model.Track
+import com.example.spotifysearch.model.Tracks
 import com.example.spotifysearch.network.models.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -31,6 +32,11 @@ interface SearchRepository {
         token: String,
         id: String
     ): Flow<Resource<Album>>
+
+    suspend fun getAlbumTracks(
+        token: String,
+        id: String
+    ): Flow<Resource<Tracks>>
 
     suspend fun getArtist(
         token: String,
