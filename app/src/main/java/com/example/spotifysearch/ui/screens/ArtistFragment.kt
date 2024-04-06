@@ -17,6 +17,7 @@ import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemArtistDetail
+import com.example.spotifysearch.ui.items.ItemBanner
 import com.example.spotifysearch.ui.items.ItemDetail
 import com.example.spotifysearch.ui.items.ItemSubHeader
 import com.xwray.groupie.GroupAdapter
@@ -189,11 +190,6 @@ class ArtistFragment : Fragment() {
     }
 
     private fun setArtistData(artist: Artist) {
-        binding.name = artist.name
-        Glide.with(this)
-            .load(artist.images.firstOrNull()?.url)
-            .into(binding.ivArtist)
-
         binding.rvArtist.adapter = detailsAdapter
         detailsAdapter.replaceAll(
             listOf(
@@ -205,6 +201,10 @@ class ArtistFragment : Fragment() {
         )
         detailsSection.replaceAll(
             listOf(
+                ItemBanner(
+                    title = artist.name,
+                    image = artist.images.firstOrNull()?.url ?: ""
+                ),
                 ItemDetail(
                     metric = "${artist.followers.total} Followers",
                     items = artist.genres

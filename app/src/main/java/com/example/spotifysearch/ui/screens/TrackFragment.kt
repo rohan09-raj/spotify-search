@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.spotifysearch.databinding.FragmentTrackBinding
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.Track
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.ui.SearchViewModel
+import com.example.spotifysearch.ui.items.ItemBanner
 import com.example.spotifysearch.ui.items.ItemDetail
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -80,11 +80,6 @@ class TrackFragment : Fragment() {
     }
 
     private fun setTrackData(track: Track) {
-        binding.name = track.name
-        Glide.with(this)
-            .load(track.album.images.firstOrNull()?.url)
-            .into(binding.ivTrack)
-
         binding.rvTrack.adapter = detailsAdapter
         detailsAdapter.replaceAll(
             listOf(
@@ -96,6 +91,10 @@ class TrackFragment : Fragment() {
         )
         detailsSection.replaceAll(
             listOf(
+                ItemBanner(
+                    title = track.name,
+                    image = track.album.images.firstOrNull()?.url ?: ""
+                ),
                 ItemDetail(
                     metric = "${track.durationMs / 1000 / 60} min :${track.durationMs / 1000 % 60} sec",
                     items = track.artists.map { it.name }

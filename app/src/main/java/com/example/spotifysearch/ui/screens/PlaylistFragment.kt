@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.spotifysearch.databinding.FragmentPlaylistBinding
 import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.ui.SearchViewModel
+import com.example.spotifysearch.ui.items.ItemBanner
 import com.example.spotifysearch.ui.items.ItemDetail
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -81,11 +80,6 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setPlaylistData(playlist: Playlist) {
-        binding.name = playlist.name
-        Glide.with(this)
-            .load(playlist.images.firstOrNull()?.url)
-            .into(binding.ivPlaylist)
-
         binding.rvPlaylist.adapter = detailsAdapter
         detailsAdapter.replaceAll(
             listOf(
@@ -97,6 +91,10 @@ class PlaylistFragment : Fragment() {
         )
         detailsSection.replaceAll(
             listOf(
+                ItemBanner(
+                    title = playlist.name,
+                    image = playlist.images.firstOrNull()?.url ?: ""
+                ),
                 ItemDetail(
                     metric = "${playlist.tracks.total} Tracks",
                     items = listOf(playlist.owner.displayName)

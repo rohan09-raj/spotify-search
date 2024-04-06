@@ -13,7 +13,6 @@ class ItemArtistDetail(
     override fun ItemArtistDetailBinding.onBind(position: Int) {
         Glide.with(context)
             .load(item.image)
-            .placeholder(R.drawable.ic_spotify)
             .into(ivSearch)
         number = item.index.toString()
         title = item.title
