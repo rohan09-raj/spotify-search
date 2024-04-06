@@ -108,20 +108,24 @@ class SearchFragment : Fragment() {
 
     private fun setLastSearchResults() {
         lastSearchSection.setHeader(ItemHeaderLastSearch())
-        viewModel.lastSearch.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.lastSearch.collectLatest { data ->
                 if (data.isNotEmpty()) {
                     binding.llEmpty.visibility = View.GONE
                     binding.rvSearch.visibility = View.VISIBLE
                 } else {
                     binding.llEmpty.visibility = View.VISIBLE
                     binding.rvSearch.visibility = View.GONE
-                    return@observe
+                    return@collectLatest
                 }
 
                 val lastSearchItems = data.map { item ->
                     ItemSearched(
                         item = item,
+                        isLastSearchItem = true,
+                        onDeleteClick = {
+                            viewModel.deleteLastSearchItem(item)
+                        },
                         onClick = {
                             when (item.type?.lowercase()) {
                                 "album" -> {

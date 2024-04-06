@@ -9,13 +9,14 @@ import com.example.spotifysearch.ui.groupie.DataBindingListItem
 
 class ItemSearched(
     val item: SearchItem,
-    val onClick: () -> Unit
+    val isLastSearchItem: Boolean = false,
+    val onClick: () -> Unit,
+    val onDeleteClick: () -> Unit = {}
 ) : DataBindingListItem<ItemSearchBinding>(R.layout.item_search) {
 
     override fun ItemSearchBinding.onBind(position: Int) {
         Glide.with(context)
             .load(item.image)
-            .placeholder(R.drawable.ic_spotify)
             .into(ivSearch)
         title = item.title
         type = item.type
@@ -25,6 +26,13 @@ class ItemSearched(
         } else {
             names = item.names.joinToString(", ")
             tvSeparator.visibility = View.VISIBLE
+        }
+
+        if (isLastSearchItem) ibDelete.visibility = View.VISIBLE
+        else ibDelete.visibility = View.GONE
+
+        ibDelete.setOnClickListener {
+            onDeleteClick()
         }
 
         root.setOnClickListener {

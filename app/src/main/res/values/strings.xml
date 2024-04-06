@@ -11,4 +11,5 @@
     <string name="recent_searches">Recent Searches</string>
     <string name="search_for">Search for artists, playlists, albums and more</string>
     <string name="play">Play what you love</string>
+    <string name="close">Close</string>
 </resources>

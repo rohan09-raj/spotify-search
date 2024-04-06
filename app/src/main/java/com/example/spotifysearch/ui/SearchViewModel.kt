@@ -38,9 +38,8 @@ internal class SearchViewModel @Inject constructor(
         MutableStateFlow<Resource<SearchResponse>>(Resource.Loading())
     val searchResultsResource = _searchResultsResource.asStateFlow()
 
-    private val _lastSearch = MutableLiveData<List<SearchItem>>()
-    val lastSearch: LiveData<List<SearchItem>>
-        get() = _lastSearch
+    private val _lastSearch = MutableStateFlow<List<SearchItem>>(emptyList())
+    val lastSearch = _lastSearch.asStateFlow()
 
     private val _albumResource = MutableLiveData<Resource<Album>>()
     val albumResource: LiveData<Resource<Album>>
@@ -155,6 +154,25 @@ internal class SearchViewModel @Inject constructor(
                 )
             }
             _lastSearch.value = lastSearchItems
+        }
+    }
+
+    fun deleteLastSearchItem(item: SearchItem) {
+        viewModelScope.launch {
+            try {
+                lastSearchDao.delete(
+                    LastSearchItem(
+                        id = item.id,
+                        image = item.image,
+                        title = item.title,
+                        type = item.type,
+                        names = item.names?.joinToString(separator = ",")
+                    )
+                )
+                getLastSearch()
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "deleteLastSearch: error $e")
+            }
         }
     }
 

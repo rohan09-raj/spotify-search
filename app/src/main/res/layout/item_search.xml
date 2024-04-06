@@ -49,7 +49,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/tv_type"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ib_delete"
             app:layout_constraintStart_toEndOf="@+id/iv_search"
             app:layout_constraintTop_toTopOf="@id/iv_search"
             app:layout_constraintVertical_chainStyle="packed"
@@ -96,9 +96,22 @@
             android:textColor="@color/light_gray"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_separator"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ib_delete"
             app:layout_constraintStart_toEndOf="@+id/tv_separator"
             app:layout_constraintTop_toTopOf="@id/tv_separator"
             tools:text="Artists" />
+
+        <ImageButton
+            android:id="@+id/ib_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:background="@color/transparent"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_close_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
