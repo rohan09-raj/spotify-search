@@ -9,6 +9,9 @@ import com.example.spotifysearch.data.SearchRepository
 import com.example.spotifysearch.database.dao.LastSearchDao
 import com.example.spotifysearch.model.Album
 import com.example.spotifysearch.model.Artist
+import com.example.spotifysearch.model.ArtistAlbums
+import com.example.spotifysearch.model.ArtistRelatedArtists
+import com.example.spotifysearch.model.ArtistTopTracks
 import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
@@ -65,6 +68,18 @@ internal class SearchViewModel @Inject constructor(
     private val _trackResource = MutableLiveData<Resource<Track>>()
     val trackResource: LiveData<Resource<Track>>
         get() = _trackResource
+
+    private val _artistTopTracksResource = MutableLiveData<Resource<ArtistTopTracks>>()
+    val artistTopTracksResource: LiveData<Resource<ArtistTopTracks>>
+        get() = _artistTopTracksResource
+
+    private val _artistAlbumsResource = MutableLiveData<Resource<ArtistAlbums>>()
+    val artistAlbumsResource: LiveData<Resource<ArtistAlbums>>
+        get() = _artistAlbumsResource
+
+    private val _relatedArtistsResource = MutableLiveData<Resource<ArtistRelatedArtists>>()
+    val relatedArtistsResource: LiveData<Resource<ArtistRelatedArtists>>
+        get() = _relatedArtistsResource
 
     fun getAccessToken() {
         viewModelScope.launch {
@@ -200,6 +215,54 @@ internal class SearchViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.d(Constants.OAUTH_TAG, "getArtist: error $e")
+            }
+        }
+    }
+
+    fun getArtistTopTracks(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getArtistTopTracks(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _artistTopTracksResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getArtistTopTracks: error $e")
+            }
+        }
+    }
+
+    fun getArtistAlbums(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getArtistAlbums(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _artistAlbumsResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getArtistAlbums: error $e")
+            }
+        }
+    }
+
+    fun getRelatedArtists(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getRelatedArtists(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _relatedArtistsResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getRelatedArtists: error $e")
             }
         }
     }

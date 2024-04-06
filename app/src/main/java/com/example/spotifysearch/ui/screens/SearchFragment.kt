@@ -96,8 +96,8 @@ class SearchFragment : Fragment() {
         searchAdapter.replaceAll(
             listOf(
                 lastSearchSection,
-                albumSection,
                 artistSection,
+                albumSection,
                 playlistSection,
                 trackSection
             )

@@ -22,6 +22,24 @@ data class Artists(
 )
 
 @Keep
+data class ArtistTopTracks (
+    @SerializedName("tracks")
+    val tracks: List<Track>
+)
+
+@Keep
+data class ArtistAlbums (
+    @SerializedName("items")
+    val items: List<Album>
+)
+
+@Keep
+data class ArtistRelatedArtists (
+    @SerializedName("artists")
+    val artists: List<Artist>
+)
+
+@Keep
 data class Artist(
     @SerializedName("id")
     val id: String,

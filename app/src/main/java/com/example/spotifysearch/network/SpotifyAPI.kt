@@ -2,6 +2,9 @@ package com.example.spotifysearch.network
 
 import com.example.spotifysearch.model.Album
 import com.example.spotifysearch.model.Artist
+import com.example.spotifysearch.model.ArtistAlbums
+import com.example.spotifysearch.model.ArtistRelatedArtists
+import com.example.spotifysearch.model.ArtistTopTracks
 import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
@@ -60,21 +63,21 @@ interface SpotifyAPI {
     suspend fun getArtistTopTracks(
         @Header("authorization") token: String,
         @Path("id") id: String
-    ): Response<SearchResponse>
+    ): Response<ArtistTopTracks>
 
     @Headers("Accept: application/json")
     @GET("artists/{id}/albums")
     suspend fun getArtistAlbums(
         @Header("authorization") token: String,
         @Path("id") id: String
-    ): Response<SearchResponse>
+    ): Response<ArtistAlbums>
 
     @Headers("Accept: application/json")
     @GET("artists/{id}/related-artists")
     suspend fun getRelatedArtists(
         @Header("authorization") token: String,
         @Path("id") id: String
-    ): Response<SearchResponse>
+    ): Response<ArtistRelatedArtists>
 
     @Headers("Accept: application/json")
     @GET("playlists/{id}")

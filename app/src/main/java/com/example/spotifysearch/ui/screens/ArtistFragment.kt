@@ -11,10 +11,13 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.spotifysearch.databinding.FragmentArtistBinding
 import com.example.spotifysearch.model.Artist
+import com.example.spotifysearch.model.ArtistDetailItem
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.ui.SearchViewModel
+import com.example.spotifysearch.ui.items.ItemArtistDetail
 import com.example.spotifysearch.ui.items.ItemDetail
+import com.example.spotifysearch.ui.items.ItemSubHeader
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -47,6 +50,9 @@ class ArtistFragment : Fragment() {
         val id = arguments?.getString("id")
         if (id != null) {
             viewModel.getArtist(id)
+            viewModel.getArtistTopTracks(id)
+            viewModel.getArtistAlbums(id)
+            viewModel.getRelatedArtists(id)
             observeArtist()
         } else {
             Toast.makeText(requireContext(), "Something went wrong!", Toast.LENGTH_SHORT).show()
@@ -64,6 +70,108 @@ class ArtistFragment : Fragment() {
                 is Resource.Success -> {
                     val artist = resource.data
                     setArtistData(artist)
+                }
+
+                is Resource.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resource.errorResponse.error?.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is Resource.Loading -> {
+                    // Show loading
+                }
+            }
+        }
+
+        viewModel.artistTopTracksResource.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    val topTracks = resource.data
+                    topTracksSection.setHeader(ItemSubHeader("Top Tracks"))
+                    topTracksSection.replaceAll(
+                        topTracks.tracks.mapIndexed { index, track ->
+                            ItemArtistDetail(
+                                item = ArtistDetailItem(
+                                    id = track.id,
+                                    index = index + 1,
+                                    title = track.name,
+                                    image = track.album.images.firstOrNull()?.url,
+                                    names = track.artists.map { it.name }
+                                ),
+                            )
+                        }
+                    )
+                }
+
+                is Resource.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resource.errorResponse.error?.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is Resource.Loading -> {
+                    // Show loading
+                }
+            }
+        }
+
+        viewModel.artistAlbumsResource.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    val albums = resource.data
+                    albumsSection.setHeader(ItemSubHeader("Albums"))
+                    albumsSection.replaceAll(
+                        albums.items.mapIndexed { index, album ->
+                            ItemArtistDetail(
+                                item = ArtistDetailItem(
+                                    id = album.id,
+                                    index = index + 1,
+                                    title = album.name,
+                                    image = album.images.firstOrNull()?.url,
+                                    names = album.artists.map { it.name }
+                                ),
+                            )
+                        }
+                    )
+                }
+
+                is Resource.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resource.errorResponse.error?.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is Resource.Loading -> {
+                    // Show loading
+                }
+            }
+        }
+
+        viewModel.relatedArtistsResource.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    val relatedArtists = resource.data
+                    relatedArtistsSection.setHeader(ItemSubHeader("Related Artists"))
+                    relatedArtistsSection.replaceAll(
+                        relatedArtists.artists.mapIndexed { index, artist ->
+                            ItemArtistDetail(
+                                item = ArtistDetailItem(
+                                    id = artist.id,
+                                    index = index + 1,
+                                    title = artist.name,
+                                    image = artist.images.firstOrNull()?.url,
+                                    names = artist.genres
+                                ),
+                            )
+                        }
+                    )
                 }
 
                 is Resource.Error -> {
