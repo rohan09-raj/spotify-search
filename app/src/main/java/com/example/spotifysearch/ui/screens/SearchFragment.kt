@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.spotifysearch.R
@@ -34,9 +35,7 @@ import javax.inject.Inject
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[SearchViewModel::class.java]
-    }
+    private val viewModel: SearchViewModel by activityViewModels()
     private var lastQuerySearchAt: Long = 0L
     private var queryJob: Job? = null
     private var searchAdapter = GroupAdapter<GroupieViewHolder>()

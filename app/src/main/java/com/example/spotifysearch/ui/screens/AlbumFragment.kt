@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -24,9 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AlbumFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumBinding
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[SearchViewModel::class.java]
-    }
+    private val viewModel: SearchViewModel by activityViewModels()
     private var detailsAdapter = GroupAdapter<GroupieViewHolder>()
     private var detailsSection = Section()
     private var albumsSection = Section()
