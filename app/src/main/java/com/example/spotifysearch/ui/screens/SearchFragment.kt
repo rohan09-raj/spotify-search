@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -96,11 +97,11 @@ class SearchFragment : Fragment() {
         binding.rvSearch.adapter = searchAdapter
         searchAdapter.replaceAll(
             listOf(
-                lastSearchSection,
                 artistSection,
                 albumSection,
                 playlistSection,
-                trackSection
+                trackSection,
+                lastSearchSection
             )
         )
     }
@@ -109,6 +110,15 @@ class SearchFragment : Fragment() {
         lastSearchSection.setHeader(ItemHeaderLastSearch())
         viewModel.lastSearch.observe(viewLifecycleOwner) { data ->
             if (data != null) {
+                if (data.isNotEmpty()) {
+                    binding.llEmpty.visibility = View.GONE
+                    binding.rvSearch.visibility = View.VISIBLE
+                } else {
+                    binding.llEmpty.visibility = View.VISIBLE
+                    binding.rvSearch.visibility = View.GONE
+                    return@observe
+                }
+
                 val lastSearchItems = data.map { item ->
                     ItemSearched(
                         item = item,
@@ -162,33 +172,28 @@ class SearchFragment : Fragment() {
                     )
                 }
                 lastSearchSection.replaceAll(lastSearchItems)
-                if (lastSearchItems.isNotEmpty()) {
-                    binding.llEmpty.visibility = View.GONE
-                    binding.rvSearch.visibility = View.VISIBLE
-                } else {
-                    binding.llEmpty.visibility = View.VISIBLE
-                    binding.rvSearch.visibility = View.GONE
-                }
             }
         }
     }
 
     private fun setSearchResults() {
-        viewModel.searchResultsResource.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    addSearchSections(resource.data)
-                }
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.searchResultsResource.collectLatest { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        addSearchSections(resource.data)
+                    }
 
-                is Resource.Error -> {
-                    Log.d(
-                        Constants.OAUTH_TAG,
-                        "getSearchResults: error ${resource.errorResponse}"
-                    )
-                }
+                    is Resource.Error -> {
+                        Log.d(
+                            Constants.OAUTH_TAG,
+                            "getSearchResults: error ${resource.errorResponse}"
+                        )
+                    }
 
-                is Resource.Loading -> {
-                    // Show loading
+                    is Resource.Loading -> {
+                        // Show loading
+                    }
                 }
             }
         }
@@ -298,7 +303,6 @@ class SearchFragment : Fragment() {
             }
         } else emptyList()
 
-        searchAdapter.remove(lastSearchSection)
         artistSection.replaceAll(artists)
         albumSection.replaceAll(albums)
         playlistSection.replaceAll(playlists)
@@ -327,5 +331,10 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        queryJob?.cancel()
     }
 }

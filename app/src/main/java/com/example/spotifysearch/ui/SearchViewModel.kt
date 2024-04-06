@@ -15,13 +15,14 @@ import com.example.spotifysearch.model.ArtistTopTracks
 import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
-import com.example.spotifysearch.model.TokenResponse
 import com.example.spotifysearch.model.Track
 import com.example.spotifysearch.model.database.LastSearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -33,9 +34,9 @@ internal class SearchViewModel @Inject constructor(
     private val lastSearchDao: LastSearchDao
 ) : ViewModel() {
 
-    private val _searchResultsResource = MutableLiveData<Resource<SearchResponse>>()
-    val searchResultsResource: LiveData<Resource<SearchResponse>>
-        get() = _searchResultsResource
+    private val _searchResultsResource =
+        MutableStateFlow<Resource<SearchResponse>>(Resource.Loading())
+    val searchResultsResource = _searchResultsResource.asStateFlow()
 
     private val _lastSearch = MutableLiveData<List<SearchItem>>()
     val lastSearch: LiveData<List<SearchItem>>
