@@ -161,6 +161,13 @@ class SearchFragment : Fragment() {
                     )
                 }
                 lastSearchSection.replaceAll(lastSearchItems)
+                if (lastSearchItems.isNotEmpty()) {
+                    binding.llEmpty.visibility = View.GONE
+                    binding.rvSearch.visibility = View.VISIBLE
+                } else {
+                    binding.llEmpty.visibility = View.VISIBLE
+                    binding.rvSearch.visibility = View.GONE
+                }
             }
         }
     }
@@ -282,6 +289,13 @@ class SearchFragment : Fragment() {
         albumSection.replaceAll(albums)
         playlistSection.replaceAll(playlists)
         trackSection.replaceAll(tracks)
+        if (artists.isNotEmpty() || albums.isNotEmpty() || playlists.isNotEmpty() || tracks.isNotEmpty()) {
+            binding.llEmpty.visibility = View.GONE
+            binding.rvSearch.visibility = View.VISIBLE
+        } else {
+            binding.llEmpty.visibility = View.VISIBLE
+            binding.rvSearch.visibility = View.GONE
+        }
     }
 
     private fun getEndTypingIndicatorInactivity(query: String): Job {

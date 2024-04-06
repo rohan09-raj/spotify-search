@@ -3,7 +3,7 @@
     <style name="Base.Theme.SpotifySearch" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:statusBarColor">@color/black</item>
         <item name="android:textColorSecondary">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>
     </style>
