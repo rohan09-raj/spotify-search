@@ -38,7 +38,20 @@
         android:id="@+id/artistFragment"
         android:name="com.example.spotifysearch.ui.screens.ArtistFragment"
         android:label="fragment_artist"
-        tools:layout="@layout/fragment_artist" />
+        tools:layout="@layout/fragment_artist">
+
+        <action
+            android:id="@+id/action_artist_to_album"
+            app:destination="@id/albumFragment" />
+
+        <action
+            android:id="@+id/action_artist_to_track"
+            app:destination="@id/trackFragment" />
+
+        <action
+            android:id="@+id/action_artist_to_artist"
+            app:destination="@id/artistFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/playlistFragment"

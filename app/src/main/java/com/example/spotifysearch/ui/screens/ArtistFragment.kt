@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
+import com.example.spotifysearch.R
 import com.example.spotifysearch.databinding.FragmentArtistBinding
 import com.example.spotifysearch.model.Artist
 import com.example.spotifysearch.model.ArtistDetailItem
@@ -101,6 +100,16 @@ class ArtistFragment : Fragment() {
                                     image = track.album.images.firstOrNull()?.url,
                                     names = track.artists.map { it.name }
                                 ),
+                                onClick = {
+                                    val fragment = TrackFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", track.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_artist_to_track,
+                                        bundle
+                                    )
+                                }
                             )
                         }
                     )
@@ -135,6 +144,16 @@ class ArtistFragment : Fragment() {
                                     image = album.images.firstOrNull()?.url,
                                     names = album.artists.map { it.name }
                                 ),
+                                onClick = {
+                                    val fragment = AlbumFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", album.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_artist_to_album,
+                                        bundle
+                                    )
+                                }
                             )
                         }
                     )
@@ -169,6 +188,16 @@ class ArtistFragment : Fragment() {
                                     image = artist.images.firstOrNull()?.url,
                                     names = artist.genres
                                 ),
+                                onClick = {
+                                    val fragment = ArtistFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", artist.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_artist_to_artist,
+                                        bundle
+                                    )
+                                }
                             )
                         }
                     )
