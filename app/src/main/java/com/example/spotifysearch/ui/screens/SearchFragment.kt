@@ -1,23 +1,25 @@
 package com.example.spotifysearch.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.spotifysearch.R
 import com.example.spotifysearch.databinding.FragmentSearchBinding
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
+import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemHeaderLastSearch
 import com.example.spotifysearch.ui.items.ItemSearched
 import com.example.spotifysearch.ui.items.ItemSubHeader
+import com.example.spotifysearch.utils.Constants
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -172,9 +174,22 @@ class SearchFragment : Fragment() {
     }
 
     private fun setSearchResults() {
-        viewModel.searchResults.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                addSearchSections(data)
+        viewModel.searchResultsResource.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    addSearchSections(resource.data)
+                }
+
+                is Resource.Error -> {
+                    Log.d(
+                        Constants.OAUTH_TAG,
+                        "getSearchResults: error ${resource.errorResponse}"
+                    )
+                }
+
+                is Resource.Loading -> {
+                    // Show loading
+                }
             }
         }
     }

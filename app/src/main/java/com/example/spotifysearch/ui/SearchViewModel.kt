@@ -33,21 +33,9 @@ internal class SearchViewModel @Inject constructor(
     private val lastSearchDao: LastSearchDao
 ) : ViewModel() {
 
-    private val _tokenResource = MutableLiveData<Resource<TokenResponse>>()
-    val tokenResource: LiveData<Resource<TokenResponse>>
-        get() = _tokenResource
-
-    private val _tokenResponse = MutableLiveData<TokenResponse>()
-    val tokenResponse: LiveData<TokenResponse>
-        get() = _tokenResponse
-
     private val _searchResultsResource = MutableLiveData<Resource<SearchResponse>>()
     val searchResultsResource: LiveData<Resource<SearchResponse>>
         get() = _searchResultsResource
-
-    private val _searchResults = MutableLiveData<SearchResponse>()
-    val searchResults: LiveData<SearchResponse>
-        get() = _searchResults
 
     private val _lastSearch = MutableLiveData<List<SearchItem>>()
     val lastSearch: LiveData<List<SearchItem>>
@@ -89,17 +77,14 @@ internal class SearchViewModel @Inject constructor(
                     clientSecret = Constants.CLIENT_SECRET,
                     grantType = Constants.GRANT_TYPE
                 ).collect { resource ->
-                    _tokenResource.value = resource
                     when (resource) {
                         is Resource.Success -> {
-                            _tokenResponse.value = resource.data
-                            Log.d(Constants.OAUTH_TAG, "getAccessToken: ${resource.data}")
+                            val tokenResponse = resource.data
 
-                            sharedPreference.accessToken = _tokenResponse.value?.accessToken
-                            sharedPreference.tokenType = _tokenResponse.value?.tokenType
+                            sharedPreference.accessToken = tokenResponse.accessToken
+                            sharedPreference.tokenType = tokenResponse.tokenType
                             sharedPreference.expiresIn =
-                                (Date().time / 1000) + (_tokenResponse.value?.expiresIn?.toLong()
-                                    ?: 3600L)
+                                (Date().time / 1000) + tokenResponse.expiresIn.toLong()
                         }
 
                         is Resource.Error -> {
@@ -132,21 +117,6 @@ internal class SearchViewModel @Inject constructor(
                     limit = 20
                 ).collect { resource ->
                     _searchResultsResource.value = resource
-                    when (resource) {
-                        is Resource.Success -> {
-                            _searchResults.value = resource.data
-                        }
-
-                        is Resource.Error -> {
-                            Log.d(
-                                Constants.OAUTH_TAG,
-                                "getSearchResults: error ${resource.errorResponse}"
-                            )
-                        }
-
-                        else -> {
-                        }
-                    }
                 }
             } catch (e: Exception) {
                 Log.d(Constants.OAUTH_TAG, "getSearchResults: error $e")
