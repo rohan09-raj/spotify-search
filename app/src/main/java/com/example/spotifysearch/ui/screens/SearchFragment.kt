@@ -17,8 +17,8 @@ import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemHeaderLastSearch
+import com.example.spotifysearch.ui.items.ItemSearchSubHeader
 import com.example.spotifysearch.ui.items.ItemSearched
-import com.example.spotifysearch.ui.items.ItemSubHeader
 import com.example.spotifysearch.utils.Constants
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -204,10 +204,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun addSearchSections(searchResponse: SearchResponse) {
-        artistSection.setHeader(ItemSubHeader(getString(R.string.artist)))
-        albumSection.setHeader(ItemSubHeader(getString(R.string.album)))
-        playlistSection.setHeader(ItemSubHeader(getString(R.string.playlist)))
-        trackSection.setHeader(ItemSubHeader(getString(R.string.track)))
+        artistSection.setHeader(ItemSearchSubHeader(getString(R.string.artist)))
+        albumSection.setHeader(ItemSearchSubHeader(getString(R.string.album)))
+        playlistSection.setHeader(ItemSearchSubHeader(getString(R.string.playlist)))
+        trackSection.setHeader(ItemSearchSubHeader(getString(R.string.track)))
 
         val albums =
             if (searchResponse.albums.items.isNotEmpty()) searchResponse.albums.items.map { album ->
