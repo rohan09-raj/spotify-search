@@ -6,11 +6,7 @@
     <data>
 
         <variable
-            name="followersCount"
-            type="String" />
-
-        <variable
-            name="title"
+            name="metricCount"
             type="String" />
     </data>
 
@@ -25,13 +21,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
-            android:text="@{followersCount}"
+            android:text="@{metricCount}"
             android:textColor="@color/light_gray"
             android:textSize="16sp"
             tools:text="3,000,000 Followers" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_genres"
+            android:id="@+id/rv_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

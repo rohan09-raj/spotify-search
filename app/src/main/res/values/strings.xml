@@ -4,9 +4,9 @@
     <string name="search">Search</string>
     <string name="dot">•</string>
     <string name="back">Back</string>
-    <string name="album">Album</string>
-    <string name="artist">Artist</string>
-    <string name="playlist">Playlist</string>
-    <string name="track">Track</string>
+    <string name="album">Albums</string>
+    <string name="artist">Artists</string>
+    <string name="playlist">Playlists</string>
+    <string name="track">Tracks</string>
     <string name="recent_searches">Recent Searches</string>
 </resources>

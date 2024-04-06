@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.spotifysearch.databinding.FragmentTrackBinding
+import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.Track
+import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemDetail
 import com.xwray.groupie.GroupAdapter
@@ -42,21 +45,46 @@ class TrackFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getString("id")
-        val trackDetail = viewModel.searchResults.value?.tracks?.items?.find { it.id == id }
+        if (id != null) {
+            viewModel.getTrack(id)
+            observeTrack()
+        } else {
+            Toast.makeText(requireContext(), "Something went wrong!", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
 
         binding.ibBack.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
 
-        if (trackDetail != null) {
-            setUpRecyclerView(trackDetail)
+    private fun observeTrack() {
+        viewModel.trackResource.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    val track = resource.data
+                    setTrackData(track)
+                }
+
+                is Resource.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resource.errorResponse.error?.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is Resource.Loading -> {
+                    // Show loading
+                }
+            }
         }
     }
 
-    private fun setUpRecyclerView(trackDetail: Track) {
-        binding.name = trackDetail.name
+    private fun setTrackData(track: Track) {
+        binding.name = track.name
         Glide.with(this)
-            .load(trackDetail.album.images.firstOrNull()?.url)
+            .load(track.album.images.firstOrNull()?.url)
             .into(binding.ivTrack)
 
         binding.rvTrack.adapter = detailsAdapter
@@ -71,9 +99,18 @@ class TrackFragment : Fragment() {
         detailsSection.replaceAll(
             listOf(
                 ItemDetail(
-                    followers = 1000,
-                    genres = listOf("Pop", "Rock", "Jazz")
+                    metric = "${track.durationMs / 1000 / 60} min :${track.durationMs / 1000 % 60} sec",
+                    items = track.artists.map { it.name }
                 )
+            )
+        )
+        viewModel.insertLastSearch(
+            SearchItem(
+                id = track.id,
+                image = track.album.images.firstOrNull()?.url,
+                title = track.name,
+                type = track.type.replaceFirstChar { it.uppercase() },
+                names = track.artists.map { it.name }
             )
         )
     }

@@ -1,7 +1,11 @@
 package com.example.spotifysearch.data
 
+import com.example.spotifysearch.model.Album
+import com.example.spotifysearch.model.Artist
+import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
+import com.example.spotifysearch.model.Track
 import com.example.spotifysearch.network.SpotifyAPI
 import com.example.spotifysearch.network.executeRetrofitApi
 import com.example.spotifysearch.network.models.Resource
@@ -56,6 +60,102 @@ class SearchDataSource @Inject constructor(
                     query = query,
                     type = type,
                     limit = limit
+                )
+            }
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    override suspend fun getAlbum(token: String, id: String): Flow<Resource<Album>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = executeRetrofitApi {
+                spotifyAPI.getAlbum(
+                    token = token,
+                    id = id
+                )
+            }
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    override suspend fun getArtist(token: String, id: String): Flow<Resource<Artist>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = executeRetrofitApi {
+                spotifyAPI.getArtist(
+                    token = token,
+                    id = id
+                )
+            }
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    override suspend fun getPlaylist(token: String, id: String): Flow<Resource<Playlist>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = executeRetrofitApi {
+                spotifyAPI.getPlaylist(
+                    token = token,
+                    id = id
+                )
+            }
+
+            when (response) {
+                is Resource.Success -> {
+                    emit(Resource.Success(response.data))
+                }
+
+                is Resource.Error -> {
+                    emit(Resource.Error(response.errorResponse))
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    override suspend fun getTrack(token: String, id: String): Flow<Resource<Track>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = executeRetrofitApi {
+                spotifyAPI.getTrack(
+                    token = token,
+                    id = id
                 )
             }
 

@@ -19,6 +19,7 @@
             android:id="@+id/tv_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_medium"
             android:padding="8dp"
             android:text="@{genre}"
             android:textColor="@color/white"

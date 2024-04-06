@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:ellipsize="end"
+            android:fontFamily="@font/nunito_medium"
             android:maxLines="1"
             android:text="@{names}"
             android:textColor="@color/light_gray"
@@ -100,5 +101,4 @@
             app:layout_constraintTop_toTopOf="@id/tv_separator"
             tools:text="Artists" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

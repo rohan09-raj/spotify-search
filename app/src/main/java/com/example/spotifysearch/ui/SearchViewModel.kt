@@ -7,9 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spotifysearch.data.SearchRepository
 import com.example.spotifysearch.database.dao.LastSearchDao
+import com.example.spotifysearch.model.Album
+import com.example.spotifysearch.model.Artist
+import com.example.spotifysearch.model.Playlist
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
+import com.example.spotifysearch.model.Track
 import com.example.spotifysearch.model.database.LastSearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
@@ -45,6 +49,22 @@ internal class SearchViewModel @Inject constructor(
     private val _lastSearch = MutableLiveData<List<SearchItem>>()
     val lastSearch: LiveData<List<SearchItem>>
         get() = _lastSearch
+
+    private val _albumResource = MutableLiveData<Resource<Album>>()
+    val albumResource: LiveData<Resource<Album>>
+        get() = _albumResource
+
+    private val _artistResource = MutableLiveData<Resource<Artist>>()
+    val artistResource: LiveData<Resource<Artist>>
+        get() = _artistResource
+
+    private val _playlistResource = MutableLiveData<Resource<Playlist>>()
+    val playlistResource: LiveData<Resource<Playlist>>
+        get() = _playlistResource
+
+    private val _trackResource = MutableLiveData<Resource<Track>>()
+    val trackResource: LiveData<Resource<Track>>
+        get() = _trackResource
 
     fun getAccessToken() {
         viewModelScope.launch {
@@ -149,6 +169,70 @@ internal class SearchViewModel @Inject constructor(
                 )
             }
             _lastSearch.value = lastSearchItems
+        }
+    }
+
+    fun getAlbum(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getAlbum(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _albumResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getAlbum: error $e")
+            }
+        }
+    }
+
+    fun getArtist(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getArtist(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _artistResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getArtist: error $e")
+            }
+        }
+    }
+
+    fun getPlaylist(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getPlaylist(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _playlistResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getPlaylist: error $e")
+            }
+        }
+    }
+
+    fun getTrack(id: String) {
+        viewModelScope.launch {
+            try {
+                val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
+                searchRepository.getTrack(
+                    token = token,
+                    id = id
+                ).collect { resource ->
+                    _trackResource.value = resource
+                }
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "getTrack: error $e")
+            }
         }
     }
 }

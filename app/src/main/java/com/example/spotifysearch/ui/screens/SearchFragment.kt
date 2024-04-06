@@ -11,10 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.spotifysearch.R
 import com.example.spotifysearch.databinding.FragmentSearchBinding
 import com.example.spotifysearch.model.SearchItem
+import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemHeaderLastSearch
 import com.example.spotifysearch.ui.items.ItemSearched
+import com.example.spotifysearch.ui.items.ItemSubHeader
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -38,7 +40,11 @@ class SearchFragment : Fragment() {
     private var lastQuerySearchAt: Long = 0L
     private var queryJob: Job? = null
     private var searchAdapter = GroupAdapter<GroupieViewHolder>()
-    private var searchResultSection = Section()
+    private var lastSearchSection = Section()
+    private var albumSection = Section()
+    private var artistSection = Section()
+    private var playlistSection = Section()
+    private var trackSection = Section()
 
     @Inject
     lateinit var sharedPreference: SharedPreference
@@ -87,11 +93,19 @@ class SearchFragment : Fragment() {
 
     private fun setRecyclerView() {
         binding.rvSearch.adapter = searchAdapter
-        searchAdapter.replaceAll(listOf(searchResultSection))
+        searchAdapter.replaceAll(
+            listOf(
+                lastSearchSection,
+                albumSection,
+                artistSection,
+                playlistSection,
+                trackSection
+            )
+        )
     }
 
     private fun setLastSearchResults() {
-        searchResultSection.setHeader(ItemHeaderLastSearch())
+        lastSearchSection.setHeader(ItemHeaderLastSearch())
         viewModel.lastSearch.observe(viewLifecycleOwner) { data ->
             if (data != null) {
                 val lastSearchItems = data.map { item ->
@@ -146,123 +160,128 @@ class SearchFragment : Fragment() {
                         }
                     )
                 }
-                searchResultSection.replaceAll(lastSearchItems)
+                lastSearchSection.replaceAll(lastSearchItems)
             }
         }
     }
 
     private fun setSearchResults() {
-//        searchResultSection.removeHeader()
         viewModel.searchResults.observe(viewLifecycleOwner) { data ->
             if (data != null) {
-                val searchItems: MutableList<SearchItem> = mutableListOf()
-
-                val albums = if (data.albums.items.isNotEmpty()) data.albums.items.map { album ->
-                    SearchItem(
-                        id = album.id,
-                        image = album.images.firstOrNull()?.url,
-                        title = album.name,
-                        type = album.type.replaceFirstChar { it.uppercase() },
-                        names = album.artists.map { it.name }
-                    )
-                } else emptyList()
-                val artists = if (data.artists.items.isNotEmpty()) {
-                    data.artists.items.map { artist ->
-                        SearchItem(
-                            id = artist.id,
-                            image = artist.images.firstOrNull()?.url,
-                            title = artist.name,
-                            type = artist.type.replaceFirstChar { it.uppercase() }
-                        )
-                    }
-                } else emptyList()
-
-                val playlists = if (data.playlists.items.isNotEmpty()) {
-                    data.playlists.items.map { playlist ->
-                        SearchItem(
-                            id = playlist.id,
-                            image = playlist.images.firstOrNull()?.url,
-                            title = playlist.name,
-                            type = playlist.type.replaceFirstChar { it.uppercase() },
-                            names = listOf(playlist.owner.displayName)
-                        )
-                    }
-                } else emptyList()
-
-                val tracks = if (data.tracks.items.isNotEmpty()) {
-                    data.tracks.items.map { track ->
-                        SearchItem(
-                            id = track.id,
-                            image = track.album.images.firstOrNull()?.url,
-                            title = track.name,
-                            type = track.type.replaceFirstChar { it.uppercase() },
-                            names = track.artists.map { it.name }
-                        )
-                    }
-                } else emptyList()
-
-                searchItems.addAll(albums)
-                searchItems.addAll(artists)
-                searchItems.addAll(playlists)
-                searchItems.addAll(tracks)
-                searchItems.sortBy { it.id }
-
-                val searchedItems = searchItems.toList().map { item ->
-                    ItemSearched(
-                        item = item,
-                        onClick = {
-                            when (item.type?.lowercase()) {
-                                "album" -> {
-                                    val fragment = AlbumFragment()
-                                    val bundle = Bundle()
-                                    bundle.putString("id", item.id)
-                                    fragment.arguments = bundle
-                                    findNavController().navigate(
-                                        R.id.action_search_to_album,
-                                        bundle
-                                    )
-                                }
-
-                                "artist" -> {
-                                    val fragment = ArtistFragment()
-                                    val bundle = Bundle()
-                                    bundle.putString("id", item.id)
-                                    fragment.arguments = bundle
-                                    findNavController().navigate(
-                                        R.id.action_search_to_artist,
-                                        bundle
-                                    )
-                                }
-
-                                "playlist" -> {
-                                    val fragment = PlaylistFragment()
-                                    val bundle = Bundle()
-                                    bundle.putString("id", item.id)
-                                    fragment.arguments = bundle
-                                    findNavController().navigate(
-                                        R.id.action_search_to_playlist,
-                                        bundle
-                                    )
-                                }
-
-                                "track" -> {
-                                    val fragment = TrackFragment()
-                                    val bundle = Bundle()
-                                    bundle.putString("id", item.id)
-                                    fragment.arguments = bundle
-                                    findNavController().navigate(
-                                        R.id.action_search_to_track,
-                                        bundle
-                                    )
-                                }
-                            }
-                        }
-                    )
-                }
-
-                searchResultSection.replaceAll(searchedItems)
+                addSearchSections(data)
             }
         }
+    }
+
+    private fun addSearchSections(searchResponse: SearchResponse) {
+        albumSection.setHeader(ItemSubHeader(getString(R.string.album)))
+        artistSection.setHeader(ItemSubHeader(getString(R.string.artist)))
+        playlistSection.setHeader(ItemSubHeader(getString(R.string.playlist)))
+        trackSection.setHeader(ItemSubHeader(getString(R.string.track)))
+
+        val albums =
+            if (searchResponse.albums.items.isNotEmpty()) searchResponse.albums.items.map { album ->
+                val searchItem = SearchItem(
+                    id = album.id,
+                    image = album.images.firstOrNull()?.url,
+                    title = album.name,
+                    type = album.type.replaceFirstChar { it.uppercase() },
+                    names = album.artists.map { it.name }
+                )
+                ItemSearched(
+                    item = searchItem,
+                    onClick = {
+                        val fragment = AlbumFragment()
+                        val bundle = Bundle()
+                        bundle.putString("id", searchItem.id)
+                        fragment.arguments = bundle
+                        findNavController().navigate(
+                            R.id.action_search_to_album,
+                            bundle
+                        )
+                    }
+                )
+            } else emptyList()
+        val artists = if (searchResponse.artists.items.isNotEmpty()) {
+            searchResponse.artists.items.map { artist ->
+                val searchItem = SearchItem(
+                    id = artist.id,
+                    image = artist.images.firstOrNull()?.url,
+                    title = artist.name,
+                    type = artist.type.replaceFirstChar { it.uppercase() }
+                )
+                ItemSearched(
+                    item = searchItem,
+                    onClick = {
+                        val fragment = ArtistFragment()
+                        val bundle = Bundle()
+                        bundle.putString("id", searchItem.id)
+                        fragment.arguments = bundle
+                        findNavController().navigate(
+                            R.id.action_search_to_artist,
+                            bundle
+                        )
+                    }
+                )
+            }
+
+        } else emptyList()
+
+        val playlists = if (searchResponse.playlists.items.isNotEmpty()) {
+            searchResponse.playlists.items.map { playlist ->
+                val searchItem = SearchItem(
+                    id = playlist.id,
+                    image = playlist.images.firstOrNull()?.url,
+                    title = playlist.name,
+                    type = playlist.type.replaceFirstChar { it.uppercase() },
+                    names = listOf(playlist.owner.displayName)
+                )
+                ItemSearched(
+                    item = searchItem,
+                    onClick = {
+                        val fragment = PlaylistFragment()
+                        val bundle = Bundle()
+                        bundle.putString("id", searchItem.id)
+                        fragment.arguments = bundle
+                        findNavController().navigate(
+                            R.id.action_search_to_playlist,
+                            bundle
+                        )
+                    }
+                )
+            }
+        } else emptyList()
+
+        val tracks = if (searchResponse.tracks.items.isNotEmpty()) {
+            searchResponse.tracks.items.map { track ->
+                val searchItem = SearchItem(
+                    id = track.id,
+                    image = track.album.images.firstOrNull()?.url,
+                    title = track.name,
+                    type = track.type.replaceFirstChar { it.uppercase() },
+                    names = track.artists.map { it.name }
+                )
+                ItemSearched(
+                    item = searchItem,
+                    onClick = {
+                        val fragment = TrackFragment()
+                        val bundle = Bundle()
+                        bundle.putString("id", searchItem.id)
+                        fragment.arguments = bundle
+                        findNavController().navigate(
+                            R.id.action_search_to_track,
+                            bundle
+                        )
+                    }
+                )
+            }
+        } else emptyList()
+
+        searchAdapter.remove(lastSearchSection)
+        albumSection.replaceAll(albums)
+        artistSection.replaceAll(artists)
+        playlistSection.replaceAll(playlists)
+        trackSection.replaceAll(tracks)
     }
 
     private fun getEndTypingIndicatorInactivity(query: String): Job {
