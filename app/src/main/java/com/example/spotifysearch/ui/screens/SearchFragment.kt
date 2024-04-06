@@ -174,8 +174,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun addSearchSections(searchResponse: SearchResponse) {
-        albumSection.setHeader(ItemSubHeader(getString(R.string.album)))
         artistSection.setHeader(ItemSubHeader(getString(R.string.artist)))
+        albumSection.setHeader(ItemSubHeader(getString(R.string.album)))
         playlistSection.setHeader(ItemSubHeader(getString(R.string.playlist)))
         trackSection.setHeader(ItemSubHeader(getString(R.string.track)))
 
@@ -278,8 +278,8 @@ class SearchFragment : Fragment() {
         } else emptyList()
 
         searchAdapter.remove(lastSearchSection)
-        albumSection.replaceAll(albums)
         artistSection.replaceAll(artists)
+        albumSection.replaceAll(albums)
         playlistSection.replaceAll(playlists)
         trackSection.replaceAll(tracks)
     }
