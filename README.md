@@ -11,9 +11,10 @@ Welcome to Spotify Search, your ultimate companion for exploring the vast world 
 [Groww Assignment APK](https://drive.google.com/drive/folders/1bo4L81OgNJbd-128RQRwBs3gsyx7WNi7?usp=drive_link)
 
 ## Screen
- Splash Screen | Recent Searches | Search
-:-------------------------:|:-------------------------:|:-------------------------:
-![Screenshot_2024-04-06-14-27-08-559_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/294853ec-b77c-4c39-a176-2a56df7c15d2) | ![Screenshot_2024-04-06-14-28-09-848_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/5f641309-e23f-46d6-9715-ffef2896fb84) | ![Screenshot_2024-04-06-14-28-36-286_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/c1f9fd69-d52e-497f-ac10-aaae7abaaf59)
+ Splash Screen | Recent Searches | Search | Search Detail
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![Screenshot_2024-04-06-14-27-08-559_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/294853ec-b77c-4c39-a176-2a56df7c15d2) | ![Screenshot_2024-04-06-14-28-09-848_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/5f641309-e23f-46d6-9715-ffef2896fb84) | ![Screenshot_2024-04-06-14-28-36-286_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/c1f9fd69-d52e-497f-ac10-aaae7abaaf59) | ![Screenshot_2024-04-06-15-36-55-471_com example spotifysearch](https://github.com/rohan09-raj/spotify-search/assets/78433013/1e5f6ffa-d754-4583-b462-cdd9034ae781)
+
 
 ## Android App in Action
 https://github.com/rohan09-raj/spotify-search/assets/78433013/933e8c72-9ffa-4dbc-8251-5314bc0857e3
