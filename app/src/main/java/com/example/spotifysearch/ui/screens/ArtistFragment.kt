@@ -89,7 +89,7 @@ class ArtistFragment : Fragment() {
             when (resource) {
                 is Resource.Success -> {
                     val topTracks = resource.data
-                    topTracksSection.setHeader(ItemSubHeader("Top Tracks"))
+                    topTracksSection.setHeader(ItemSubHeader(getString(R.string.top_tracks)))
                     topTracksSection.replaceAll(
                         topTracks.tracks.mapIndexed { index, track ->
                             ItemArtistDetail(
@@ -133,7 +133,7 @@ class ArtistFragment : Fragment() {
             when (resource) {
                 is Resource.Success -> {
                     val albums = resource.data
-                    albumsSection.setHeader(ItemSubHeader("Albums"))
+                    albumsSection.setHeader(ItemSubHeader(getString(R.string.album)))
                     albumsSection.replaceAll(
                         albums.items.mapIndexed { index, album ->
                             ItemArtistDetail(
@@ -177,7 +177,7 @@ class ArtistFragment : Fragment() {
             when (resource) {
                 is Resource.Success -> {
                     val relatedArtists = resource.data
-                    relatedArtistsSection.setHeader(ItemSubHeader("Related Artists"))
+                    relatedArtistsSection.setHeader(ItemSubHeader(getString(R.string.related_artists)))
                     relatedArtistsSection.replaceAll(
                         relatedArtists.artists.mapIndexed { index, artist ->
                             ItemArtistDetail(

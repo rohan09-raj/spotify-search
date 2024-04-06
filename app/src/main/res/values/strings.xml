@@ -12,4 +12,6 @@
     <string name="search_for">Search for artists, playlists, albums and more</string>
     <string name="play">Play what you love</string>
     <string name="close">Close</string>
+    <string name="top_tracks">Top Tracks</string>
+    <string name="related_artists">Related Artists</string>
 </resources>

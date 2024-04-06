@@ -108,11 +108,16 @@ internal class SearchViewModel @Inject constructor(
         }
     }
 
-    fun getSearchResults(query: String, type: List<String>) {
+    fun getSearchResults(query: String) {
         viewModelScope.launch {
             try {
                 val token = "${sharedPreference.tokenType} ${sharedPreference.accessToken}"
-                val types = type.joinToString(separator = ",")
+                val types = listOf(
+                    Constants.SearchType.ALBUM,
+                    Constants.SearchType.ARTIST,
+                    Constants.SearchType.PLAYLIST,
+                    Constants.SearchType.TRACK
+                ).joinToString(separator = ",")
 
                 searchRepository.search(
                     token = token,

@@ -72,10 +72,7 @@ class SearchFragment : Fragment() {
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()) {
-                    viewModel.getSearchResults(
-                        query,
-                        listOf("album", "artist", "playlist", "track")
-                    )
+                    viewModel.getSearchResults(query)
                 }
                 return true
             }
@@ -128,7 +125,7 @@ class SearchFragment : Fragment() {
                         },
                         onClick = {
                             when (item.type?.lowercase()) {
-                                "album" -> {
+                                Constants.SearchType.ALBUM -> {
                                     val fragment = AlbumFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
@@ -139,7 +136,7 @@ class SearchFragment : Fragment() {
                                     )
                                 }
 
-                                "artist" -> {
+                                Constants.SearchType.ARTIST -> {
                                     val fragment = ArtistFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
@@ -150,7 +147,7 @@ class SearchFragment : Fragment() {
                                     )
                                 }
 
-                                "playlist" -> {
+                                Constants.SearchType.PLAYLIST -> {
                                     val fragment = PlaylistFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
@@ -161,7 +158,7 @@ class SearchFragment : Fragment() {
                                     )
                                 }
 
-                                "track" -> {
+                                Constants.SearchType.TRACK -> {
                                     val fragment = TrackFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
@@ -327,10 +324,7 @@ class SearchFragment : Fragment() {
                 val currentTime = Date().time
                 val duration = currentTime.minus(lastQuerySearchAt)
                 if (duration > 500) {
-                    viewModel.getSearchResults(
-                        query,
-                        listOf("album", "artist", "playlist", "track")
-                    )
+                    viewModel.getSearchResults(query)
                     queryJob?.cancel()
                 }
             }

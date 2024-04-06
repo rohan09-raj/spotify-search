@@ -11,4 +11,11 @@ object Constants {
     const val GRANT_TYPE = "client_credentials"
 
     const val OAUTH_TAG = "OAUTH_SPOTIFY"
+
+    object SearchType {
+        const val ARTIST = "artist"
+        const val ALBUM = "album"
+        const val PLAYLIST = "playlist"
+        const val TRACK = "track"
+    }
 }
