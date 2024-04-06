@@ -8,7 +8,7 @@ Welcome to Spotify Search, your ultimate companion for exploring the vast world 
 - Recent Search enhances the search experience by displaying the most recent detail page visits using RoomDB
 
 ## Android APK
-https://github.com/rohan09-raj/android-app-gitify/releases/download/v1.0/app-release.apk
+[Groww Assignment APK](https://drive.google.com/drive/folders/1bo4L81OgNJbd-128RQRwBs3gsyx7WNi7?usp=drive_link)
 
 ## Screen
  Splash Screen | Recent Searches | Search
