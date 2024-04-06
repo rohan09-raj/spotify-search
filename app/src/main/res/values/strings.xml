@@ -4,4 +4,8 @@
     <string name="search">Search</string>
     <string name="dot">•</string>
     <string name="back">Back</string>
+    <string name="album">Album</string>
+    <string name="artist">Artist</string>
+    <string name="playlist">Playlist</string>
+    <string name="track">Track</string>
 </resources>

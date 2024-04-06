@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
-            android:text="@{followers}"
+            android:text="@{followersCount}"
             android:textColor="@color/light_gray"
             android:textSize="16sp"
             tools:text="3,000,000 Followers" />

@@ -19,12 +19,12 @@ class ItemSearched(
             .into(ivSearch)
         title = item.title
         type = item.type
-        if (item.names?.isEmpty() != true) {
-            names = item.names?.joinToString(", ")
-            tvSeparator.visibility = View.VISIBLE
-        } else {
+        if (item.names.isNullOrEmpty()) {
             names = ""
             tvSeparator.visibility = View.GONE
+        } else {
+            names = item.names.joinToString(", ")
+            tvSeparator.visibility = View.VISIBLE
         }
 
         root.setOnClickListener {

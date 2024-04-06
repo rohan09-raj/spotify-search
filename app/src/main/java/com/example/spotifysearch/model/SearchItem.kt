@@ -5,5 +5,5 @@ data class SearchItem(
     val image: String? = null,
     val title: String? = null,
     val type: String? = null,
-    val names: List<String>? = null
+    val names: List<String>? = emptyList()
 )

@@ -12,13 +12,43 @@
         tools:layout="@layout/fragment_search">
 
         <action
-            android:id="@+id/action_search_to_detail"
-            app:destination="@id/searchDetailFragment" />
+            android:id="@+id/action_search_to_album"
+            app:destination="@id/albumFragment" />
+
+        <action
+            android:id="@+id/action_search_to_playlist"
+            app:destination="@id/playlistFragment" />
+
+        <action
+            android:id="@+id/action_search_to_artist"
+            app:destination="@id/artistFragment" />
+
+        <action
+            android:id="@+id/action_search_to_track"
+            app:destination="@id/trackFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/searchDetailFragment"
-        android:name="com.example.spotifysearch.ui.screens.SearchDetailFragment"
-        android:label="fragment_search_detail"
-        tools:layout="@layout/fragment_search_detail" />
+        android:id="@+id/albumFragment"
+        android:name="com.example.spotifysearch.ui.screens.AlbumFragment"
+        android:label="fragment_album"
+        tools:layout="@layout/fragment_album" />
+
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.example.spotifysearch.ui.screens.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" />
+
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.spotifysearch.ui.screens.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" />
+
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.example.spotifysearch.ui.screens.TrackFragment"
+        android:label="fragment_track"
+        tools:layout="@layout/fragment_track" />
 </navigation>
