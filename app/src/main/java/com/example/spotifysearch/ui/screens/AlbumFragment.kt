@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.spotifysearch.databinding.FragmentAlbumBinding
 import com.example.spotifysearch.model.Album
+import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.ui.SearchViewModel
 import com.example.spotifysearch.ui.items.ItemDetail
 import com.xwray.groupie.GroupAdapter
@@ -43,6 +44,18 @@ class AlbumFragment : Fragment() {
 
         val id = arguments?.getString("id")
         val albumDetail = viewModel.searchResults.value?.albums?.items?.find { it.id == id }
+
+        if (albumDetail != null) {
+            viewModel.insertLastSearch(
+                SearchItem(
+                    id = albumDetail.id,
+                    image = albumDetail.images.firstOrNull()?.url,
+                    title = albumDetail.name,
+                    type = albumDetail.type.replaceFirstChar { it.uppercase() },
+                    names = albumDetail.artists.map { it.name }
+                )
+            )
+        }
 
         binding.ibBack.setOnClickListener {
             findNavController().popBackStack()

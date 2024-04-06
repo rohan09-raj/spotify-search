@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,6 +13,7 @@ import com.example.spotifysearch.databinding.FragmentSearchBinding
 import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.ui.SearchViewModel
+import com.example.spotifysearch.ui.items.ItemHeaderLastSearch
 import com.example.spotifysearch.ui.items.ItemSearched
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -56,7 +56,10 @@ class SearchFragment : Fragment() {
         if (sharedPreference.expiresIn < (Date().time / 1000)) {
             viewModel.getAccessToken()
         }
+        viewModel.getLastSearch()
         setRecyclerView()
+        setLastSearchResults()
+        setSearchResults()
 
         val queryListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -85,6 +88,71 @@ class SearchFragment : Fragment() {
     private fun setRecyclerView() {
         binding.rvSearch.adapter = searchAdapter
         searchAdapter.replaceAll(listOf(searchResultSection))
+    }
+
+    private fun setLastSearchResults() {
+        searchResultSection.setHeader(ItemHeaderLastSearch())
+        viewModel.lastSearch.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                val lastSearchItems = data.map { item ->
+                    ItemSearched(
+                        item = item,
+                        onClick = {
+                            when (item.type?.lowercase()) {
+                                "album" -> {
+                                    val fragment = AlbumFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", item.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_search_to_album,
+                                        bundle
+                                    )
+                                }
+
+                                "artist" -> {
+                                    val fragment = ArtistFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", item.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_search_to_artist,
+                                        bundle
+                                    )
+                                }
+
+                                "playlist" -> {
+                                    val fragment = PlaylistFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", item.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_search_to_playlist,
+                                        bundle
+                                    )
+                                }
+
+                                "track" -> {
+                                    val fragment = TrackFragment()
+                                    val bundle = Bundle()
+                                    bundle.putString("id", item.id)
+                                    fragment.arguments = bundle
+                                    findNavController().navigate(
+                                        R.id.action_search_to_track,
+                                        bundle
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
+                searchResultSection.replaceAll(lastSearchItems)
+            }
+        }
+    }
+
+    private fun setSearchResults() {
+//        searchResultSection.removeHeader()
         viewModel.searchResults.observe(viewLifecycleOwner) { data ->
             if (data != null) {
                 val searchItems: MutableList<SearchItem> = mutableListOf()
@@ -149,28 +217,43 @@ class SearchFragment : Fragment() {
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
                                     fragment.arguments = bundle
-                                    findNavController().navigate(R.id.action_search_to_album, bundle)
+                                    findNavController().navigate(
+                                        R.id.action_search_to_album,
+                                        bundle
+                                    )
                                 }
+
                                 "artist" -> {
                                     val fragment = ArtistFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
                                     fragment.arguments = bundle
-                                    findNavController().navigate(R.id.action_search_to_artist, bundle)
+                                    findNavController().navigate(
+                                        R.id.action_search_to_artist,
+                                        bundle
+                                    )
                                 }
+
                                 "playlist" -> {
                                     val fragment = PlaylistFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
                                     fragment.arguments = bundle
-                                    findNavController().navigate(R.id.action_search_to_playlist, bundle)
+                                    findNavController().navigate(
+                                        R.id.action_search_to_playlist,
+                                        bundle
+                                    )
                                 }
+
                                 "track" -> {
                                     val fragment = TrackFragment()
                                     val bundle = Bundle()
                                     bundle.putString("id", item.id)
                                     fragment.arguments = bundle
-                                    findNavController().navigate(R.id.action_search_to_track, bundle)
+                                    findNavController().navigate(
+                                        R.id.action_search_to_track,
+                                        bundle
+                                    )
                                 }
                             }
                         }
@@ -178,7 +261,6 @@ class SearchFragment : Fragment() {
                 }
 
                 searchResultSection.replaceAll(searchedItems)
-                binding.rvSearch.isVisible = true
             }
         }
     }

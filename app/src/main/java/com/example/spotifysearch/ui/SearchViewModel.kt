@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spotifysearch.data.SearchRepository
+import com.example.spotifysearch.database.dao.LastSearchDao
+import com.example.spotifysearch.model.SearchItem
 import com.example.spotifysearch.model.SearchResponse
 import com.example.spotifysearch.model.TokenResponse
+import com.example.spotifysearch.model.database.LastSearchItem
 import com.example.spotifysearch.network.models.Resource
 import com.example.spotifysearch.preferences.SharedPreference
 import com.example.spotifysearch.utils.Constants
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
-    private val sharedPreference: SharedPreference
+    private val sharedPreference: SharedPreference,
+    private val lastSearchDao: LastSearchDao
 ) : ViewModel() {
 
     private val _tokenResource = MutableLiveData<Resource<TokenResponse>>()
@@ -37,6 +41,10 @@ internal class SearchViewModel @Inject constructor(
     private val _searchResults = MutableLiveData<SearchResponse>()
     val searchResults: LiveData<SearchResponse>
         get() = _searchResults
+
+    private val _lastSearch = MutableLiveData<List<SearchItem>>()
+    val lastSearch: LiveData<List<SearchItem>>
+        get() = _lastSearch
 
     fun getAccessToken() {
         viewModelScope.launch {
@@ -108,6 +116,39 @@ internal class SearchViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.d(Constants.OAUTH_TAG, "getSearchResults: error $e")
             }
+        }
+    }
+
+    fun insertLastSearch(searchItem: SearchItem) {
+        viewModelScope.launch {
+            try {
+                lastSearchDao.insert(
+                    LastSearchItem(
+                        id = searchItem.id,
+                        image = searchItem.image,
+                        title = searchItem.title,
+                        type = searchItem.type,
+                        names = searchItem.names?.joinToString(separator = ",")
+                    )
+                )
+            } catch (e: Exception) {
+                Log.d(Constants.OAUTH_TAG, "insertLastSearch: error $e")
+            }
+        }
+    }
+
+    fun getLastSearch() {
+        viewModelScope.launch {
+            val lastSearchItems = lastSearchDao.getLastSearch().map { lastSearchItem ->
+                SearchItem(
+                    id = lastSearchItem.id,
+                    image = lastSearchItem.image,
+                    title = lastSearchItem.title,
+                    type = lastSearchItem.type,
+                    names = lastSearchItem.names?.split(",")?.toList()
+                )
+            }
+            _lastSearch.value = lastSearchItems
         }
     }
 }

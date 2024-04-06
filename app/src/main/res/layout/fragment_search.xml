@@ -23,7 +23,7 @@
             android:id="@+id/tv_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_bold"
+            android:fontFamily="@font/nunito_extrabold"
             android:text="@string/search"
             android:textColor="@color/white"
             android:textSize="24sp"

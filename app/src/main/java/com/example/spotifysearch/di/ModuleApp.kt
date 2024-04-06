@@ -1,8 +1,10 @@
 package com.example.spotifysearch.di
 
 import android.content.Context
+import androidx.room.Room
 import com.example.spotifysearch.data.SearchDataSource
 import com.example.spotifysearch.data.SearchRepository
+import com.example.spotifysearch.database.AppDatabase
 import com.example.spotifysearch.network.SpotifyAPI
 import com.example.spotifysearch.preferences.SharedPreference
 import dagger.Module
@@ -37,4 +39,16 @@ object AppModule {
     @Singleton
     fun provideSharedPreference(@ApplicationContext context: Context): SharedPreference =
         SharedPreference(context)
+
+    @Singleton
+    @Provides
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        AppDatabase.DB_NAME
+    ).allowMainThreadQueries().build()
+
+    @Singleton
+    @Provides
+    fun providesLastSearchDao(appDatabase: AppDatabase) = appDatabase.getLastSearchDao()
 }
